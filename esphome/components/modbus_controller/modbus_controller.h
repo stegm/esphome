@@ -261,11 +261,10 @@ class SensorItem {
 };
 
 // ModbusController::create_register_ranges_ tries to optimize register range
-// for this the sensors should be order of its start_address separated by the
-// register type.
+// for this the sensors must be ordered by register_type, start_address and bitmask
 class SensorItemsComparator {
  public:
-  bool operator()(const SensorItem *lhs, const SensorItem *rhs) {
+  bool operator()(const SensorItem *lhs, const SensorItem *rhs) const {
     // first sort according to register type
     if (lhs->register_type != rhs->register_type) {
       return lhs->register_type < rhs->register_type;
@@ -281,8 +280,12 @@ class SensorItemsComparator {
       return lhs->start_address < rhs->start_address;
     }
 
-    // The pointer to the sensor are added at last to ensure that
-    // multiple sensors with the save values can be added with a stable sort order.
+    // sort by bitmask address
+    if (lhs->bitmask != rhs->bitmask) {
+      return lhs->bitmask < rhs->bitmask;
+    }
+    // The pointer to the sensor is used last to ensure that
+    // multiple sensors with the same values can be added with a stable sort order.
     return lhs < rhs;
   }
 };
@@ -399,7 +402,7 @@ class ModbusController : public PollingComponent, public modbus::ModbusDevice {
   void queue_command(const ModbusCommandItem &command);
   /// Registers a sensor with the controller. Called by esphomes code generator
   void add_sensor_item(SensorItem *item) { sensorset_.insert(item); }
-  /// called when a modbus response was prased without errors
+  /// called when a modbus response was parsed without errors
   void on_modbus_data(const std::vector<uint8_t> &data) override;
   /// called when a modbus error response was received
   void on_modbus_error(uint8_t function_code, uint8_t exception_code) override;
