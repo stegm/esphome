@@ -280,10 +280,6 @@ class SensorItemsComparator {
       return lhs->start_address < rhs->start_address;
     }
 
-    // sort by bitmask address
-    if (lhs->bitmask != rhs->bitmask) {
-      return lhs->bitmask < rhs->bitmask;
-    }
     // The pointer to the sensor is used last to ensure that
     // multiple sensors with the same values can be added with a stable sort order.
     return lhs < rhs;

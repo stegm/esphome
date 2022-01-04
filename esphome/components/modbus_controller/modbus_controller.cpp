@@ -280,7 +280,7 @@ void ModbusController::dump_config() {
 #if ESPHOME_LOG_LEVEL >= ESPHOME_LOG_LEVEL_VERBOSE
   ESP_LOGCONFIG(TAG, "sensormap");
   for (auto &it : sensorset_) {
-    ESP_LOGCONFIG(TAG, " Type=%zu Sensor start address=0x%X, offset=0x%X count=%d size=%d",
+    ESP_LOGCONFIG(TAG, " Sensor type=%zu start=0x%X offset=0x%X count=%d size=%d",
                   static_cast<uint8_t>(it->register_type), it->start_address, it->offset, it->register_count,
                   it->get_register_size());
   }
