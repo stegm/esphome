@@ -130,6 +130,21 @@ select:
       - two
       - three
 
+  - platform: modbus_controller
+    modbus_controller_id: modbus_controller_test
+    id: reg_1002_text
+    address: 1002
+    name: Register 1002 (Text)
+    optionsmap:
+      "ready": 1
+      "EV is present": 2
+      "charging": 3
+      "charging with ventilation": 4
+    lambda: |-
+      return std::string("anything") ;
+    write_lambda: |-
+      return 3;
+
 sensor:
   - platform: selec_meter
     total_active_energy:
